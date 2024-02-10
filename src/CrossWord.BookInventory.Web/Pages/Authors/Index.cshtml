@@ -1,0 +1,40 @@
+﻿@page
+@using CrossWord.BookInventory.Localization
+@using CrossWord.BookInventory.Permissions
+@using CrossWord.BookInventory.Web.Pages.Authors
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<BookInventoryResource> L
+@inject IAuthorizationService AuthorizationService
+@model IndexModel
+
+@section scripts
+{
+    <abp-script src="/Pages/Authors/Index.js"/>
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-xl="_2" size-lg="_2" size-md="_2">
+                <abp-card-title>@L["Authors"]</abp-card-title>
+            </abp-column>
+            <abp-column size-xl="_2"  size-lg="_2" size-md="_2">
+                @if (await AuthorizationService
+                    .IsGrantedAsync(BookInventoryPermissions.Authors.Create))
+                {
+                    <abp-button id="NewAuthorButton"
+                                text="@L["NewAuthor"].Value"
+                                icon="plus"
+                                button-type="Primary"/>
+                }
+            </abp-column>
+            <abp-column size-xl="_3" size-lg="_4" size-md="_6" offset-xl="_5" offset-lg="_4" offset-md="_2">
+                <input name="Search" class="form-control " placeholder="Search by .."/> @* add search input *@
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="AuthorsTable"></abp-table>
+    </abp-card-body>
+</abp-card>
